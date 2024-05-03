@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ChartContainer from "./ChartContainer.tsx";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip } from "recharts";
 import { PerformanceData } from "../../interfaces";
@@ -8,6 +8,8 @@ interface PerformanceChartProps {
 }
 
 const PerformanceChart = ({data}: PerformanceChartProps) => {
+
+    const [renderTooltip, setRenderTooltip] = useState(false);
     const radarData = useMemo(() => {
         if (!data) return [];
         return data.data.map((activity) => ({
@@ -19,8 +21,20 @@ const PerformanceChart = ({data}: PerformanceChartProps) => {
         }));
     }, [data]);
 
+    useEffect(() => {
+        shouldRenderTooltip();
+        window.addEventListener("resize", shouldRenderTooltip);
+        return (() => {
+            window.removeEventListener("resize", shouldRenderTooltip);
+        });
+    }, []);
+
     const shouldRenderTooltip = () => {
-        return window.innerWidth <= 1024;
+        if (window.innerWidth <= 1024) {
+            setRenderTooltip(true);
+        } else {
+            setRenderTooltip(false);
+        }
     };
 
     return (
@@ -33,10 +47,10 @@ const PerformanceChart = ({data}: PerformanceChartProps) => {
                         fill: "#FFF",
                         fontSize: "12px",
                         fontWeight: 500,
-                        opacity: shouldRenderTooltip() ? 0 : 1,
+                        opacity: renderTooltip ? 0 : 1,
                     }}
                 />
-                {shouldRenderTooltip() && <Tooltip/>}
+                {renderTooltip && <Tooltip/>}
                 <Radar dataKey="value" fill="#FF0101B2" fillOpacity={0.7}/>
             </RadarChart>
         </ChartContainer>
