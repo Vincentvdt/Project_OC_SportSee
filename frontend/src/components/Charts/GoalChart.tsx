@@ -39,6 +39,10 @@ const Title = styled.p`
     font-size: 15px;
     font-weight: 500;
     line-height: 24px;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
 `;
 
 interface GoalChartProps {

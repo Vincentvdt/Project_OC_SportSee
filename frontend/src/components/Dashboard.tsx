@@ -37,6 +37,7 @@ const LoaderIcon = () => (
 const DashboardContainer = styled.section`
     width: 100%;
     padding: 86px 90px;
+    overflow: hidden;
 
     @media (max-width: 1024px) {
         padding: 43px 45px;
@@ -49,6 +50,11 @@ const DashboardHeader = styled.div`
     align-items: flex-start;
     gap: 41px;
     margin-bottom: 77px;
+
+    @media (max-width: 1024px) {
+        gap: 10px;
+        margin-bottom: 30px;
+    }
 
     h1 {
         font-size: 3rem;
@@ -81,10 +87,6 @@ const MainLayout = styled.div`
     display: flex;
     gap: 31px;
     justify-content: space-between;
-
-    @media (max-width: 1024px) {
-        flex-direction: column;
-    }
 `;
 
 const ChartLayout = styled.div`
@@ -108,8 +110,8 @@ const ChartLayoutRow = styled.div`
         height: 263px;
 
         @media (max-width: 1024px) {
-            width: unset;
-            height: unset;
+            width: 100px;
+            height: 200px;
             flex: 1;
         }
     }
@@ -121,8 +123,10 @@ const MacrosLayout = styled.div`
     gap: 39px;
 
     @media (max-width: 1024px) {
-        flex-direction: row;
+        gap: 10px;
+        justify-content: space-between;
     }
+
 `;
 
 const standardizeUser = (user: UserAPIResponse): UserData => {

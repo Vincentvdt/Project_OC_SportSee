@@ -35,11 +35,21 @@ interface ChartContainerProps {
 
 const ChartDiv = styled.div<{
     $width: string | number,
+    $height: number,
+    $color?: string,
+    $position?: "static" | "relative" | "fixed" | "absolute" | "sticky",
+    $padding?: {
+        top?: string | number,
+        right?: string | number,
+        bottom?: string | number,
+        left?: string | number,
+    },
+
 }>`
     width: ${({$width}) => $width && (typeof $width === "string") ? `${$width}` : `${$width}px`};
-    height: ${({$height}) => $height && (typeof $height === "string") ? `${$height}` : `${$height}px`};
-    background: ${props => props.$color ? props.$color : "rgb(35 39 47)"};
-    position: ${props => props.$position && props.$position};
+    height: ${({$height}) => $height ? `${$height}px` : "100%"};
+    background: ${({$color}) => $color ? $color : "rgb(35 39 47)"};
+    position: ${({$position}) => $position && $position};
 
     padding: ${({$padding}) => $padding && `
             ${$padding.top && $padding.top != 0 ? $padding.top + "px" : 0} 
@@ -50,6 +60,10 @@ const ChartDiv = styled.div<{
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
     transition: all 400ms cubic-bezier(.47, 1.64, .41, .8);
+
+    @media (max-width: 1024px) {
+        height: ${({$height}) => $height ? `${Math.floor($height / 1.3)}px` : "100%"};
+    }
 
     &:hover {
         transform: translateY(-2px);

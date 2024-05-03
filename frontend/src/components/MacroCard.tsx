@@ -17,9 +17,7 @@ const MacroContainer = styled.div<{ $angle: number }>`
     transition: all 400ms cubic-bezier(.47, 1.64, .41, .8);
 
     @media (max-width: 1024px) {
-        flex-direction: column;
-        flex: 1;
-        justify-content: center;
+        padding: 16px;
     }
 
     img {

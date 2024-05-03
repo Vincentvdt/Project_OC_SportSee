@@ -22,6 +22,10 @@ const HeaderContainer = styled.header`
         align-items: center;
         gap: 110px;
 
+        @media (max-width: 1024px) {
+            gap: 50px;
+        }
+
         li > a {
             font-size: 1.5rem;
             font-weight: 500;

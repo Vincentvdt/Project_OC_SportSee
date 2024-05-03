@@ -1,5 +1,6 @@
+import { useMemo } from "react";
 import ChartContainer from "./ChartContainer.tsx";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, Tooltip } from "recharts";
 import { PerformanceData } from "../../interfaces";
 
 interface PerformanceChartProps {
@@ -7,24 +8,37 @@ interface PerformanceChartProps {
 }
 
 const PerformanceChart = ({data}: PerformanceChartProps) => {
+    const radarData = useMemo(() => {
+        if (!data) return [];
+        return data.data.map((activity) => ({
+            value: activity.value,
+            kind:
+                data.kind[activity.kind as keyof typeof data.kind]?.charAt(0).toUpperCase() +
+                data.kind[activity.kind as keyof typeof data.kind]?.slice(1) ||
+                "",
+        }));
+    }, [data]);
 
-    const radarData = data?.data.map((activity) => ({
-        value: activity.value,
-        kind: data.kind[activity.kind as keyof typeof data.kind]?.charAt(0).toUpperCase() + data.kind[activity.kind as keyof typeof data.kind]?.slice(1) || "",
-    }));
+    const shouldRenderTooltip = () => {
+        return window.innerWidth <= 1024;
+    };
 
     return (
         <ChartContainer width={258} height={263} color={"#282D30"}>
             <RadarChart outerRadius={70} data={radarData}>
                 <PolarGrid radialLines={false}/>
-                <PolarAngleAxis dataKey="kind" tick={{
-                    fill: "#FFF",
-                    fontSize: "12px",
-                    fontWeight: 500,
-                }}/>
-                <Radar dataKey="value" fill="#FF0101B2" fillOpacity={.7}/>
+                <PolarAngleAxis
+                    dataKey="kind"
+                    tick={{
+                        fill: "#FFF",
+                        fontSize: "12px",
+                        fontWeight: 500,
+                        opacity: shouldRenderTooltip() ? 0 : 1,
+                    }}
+                />
+                {shouldRenderTooltip() && <Tooltip/>}
+                <Radar dataKey="value" fill="#FF0101B2" fillOpacity={0.7}/>
             </RadarChart>
-
         </ChartContainer>
     );
 };
